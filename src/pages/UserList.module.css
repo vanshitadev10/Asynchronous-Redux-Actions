@@ -1,0 +1,36 @@
+.user-list{
+    height: max-content;
+    padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    text-align: center;
+}
+
+.user-list__title{
+    color: white;
+    font-size: 3.5rem;
+}
+
+.user-list__items{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+
+@media only screen and (max-width: 768px){
+    .user-list{
+        height: max-content;
+        padding-bottom: 2rem;
+    }
+    .user-list__title{
+        font-size: 2.5rem;
+    }
+    .user-list__items{
+        flex-direction: column;
+    }
+}

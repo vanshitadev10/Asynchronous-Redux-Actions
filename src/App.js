@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-function App() {
+import { fetchUserNumber } from './shared/store/data-actions';
+import UserList from './pages/UserList';
+import UserInfo from './pages/UserInfo';
+import Error from './shared/components/Error';
+
+
+const App = () => {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchUserNumber());
+  }, [dispatch]);
+
+  const error1 = useSelector(state => state.user.hasError);
+  const error2 = useSelector(state => state.userData.hasError);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error1 || error2) {
+      navigate('/error');
+    }
+  }, [error1, error2]);
+
+  const [userId, setUserId] = useState('');
+
+  const userIdHandler = (id) => {
+    setUserId(id);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    <Routes>
+      <Route path='/' element={<UserList userInfoHandler={userIdHandler} />} />
+      {userId && <Route path={`/user-info/:u${userId}`} element={<UserInfo userIdNo={userId} />} />}
+      <Route path='/error' element={<Error />} />
+      <Route path='/*' element={<Navigate replace to='/' />} />
+    </Routes>
+  )
+};
 
 export default App;
